@@ -15,23 +15,23 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { Product } from './product';
-import { SelectProduct } from '@/lib/db';
+import { Task } from './task';
+import { SelectTask } from '@/lib/db';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export function ProductsTable({
-  products,
+export function TasksTable({
+  tasks,
   offset,
-  totalProducts
+  totalTasks
 }: {
-  products: SelectProduct[];
+  tasks: SelectTask[];
   offset: number;
-  totalProducts: number;
+  totalTasks: number;
 }) {
   let router = useRouter();
-  let productsPerPage = 5;
+  let tasksPerPage = 5;
 
   function prevPage() {
     router.back();
@@ -44,24 +44,18 @@ export function ProductsTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Products</CardTitle>
+        <CardTitle>Tasks</CardTitle>
         <CardDescription>
-          Manage your products and view their sales performance.
+          Manage your tasks and view their sales performance.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden w-[100px] sm:table-cell">
-                <span className="sr-only">Image</span>
-              </TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="hidden md:table-cell">Price</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Total Sales
-              </TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead className="hidden md:table-cell">Status</TableHead>
               <TableHead className="hidden md:table-cell">Created at</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
@@ -69,9 +63,7 @@ export function ProductsTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
-              <Product key={product.id} product={product} />
-            ))}
+            {tasks?.map((task) => <Task key={task.id} task={task} />)}
           </TableBody>
         </Table>
       </CardContent>
@@ -80,9 +72,10 @@ export function ProductsTable({
           <div className="text-xs text-muted-foreground">
             Showing{' '}
             <strong>
-              {Math.max(0, Math.min(offset - productsPerPage, totalProducts) + 1)}-{offset}
+              {Math.max(0, Math.min(offset - tasksPerPage, totalTasks) + 1)}-
+              {offset}
             </strong>{' '}
-            of <strong>{totalProducts}</strong> products
+            of <strong>{totalTasks}</strong> tasks
           </div>
           <div className="flex">
             <Button
@@ -90,7 +83,7 @@ export function ProductsTable({
               variant="ghost"
               size="sm"
               type="submit"
-              disabled={offset === productsPerPage}
+              disabled={offset === tasksPerPage}
             >
               <ChevronLeft className="mr-2 h-4 w-4" />
               Prev
@@ -100,7 +93,7 @@ export function ProductsTable({
               variant="ghost"
               size="sm"
               type="submit"
-              disabled={offset + productsPerPage > totalProducts}
+              disabled={offset + tasksPerPage > totalTasks ? false : true}
             >
               Next
               <ChevronRight className="ml-2 h-4 w-4" />

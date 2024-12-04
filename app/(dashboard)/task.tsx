@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,32 +9,22 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { SelectProduct } from '@/lib/db';
-import { deleteProduct } from './actions';
+import { SelectTask } from '@/lib/db';
+import { deleteTask } from './actions';
+import Link from 'next/link';
 
-export function Product({ product }: { product: SelectProduct }) {
+export function Task({ task }: { task: SelectTask }) {
   return (
     <TableRow>
-      <TableCell className="hidden sm:table-cell">
-        <Image
-          alt="Product image"
-          className="aspect-square rounded-md object-cover"
-          height="64"
-          src={product.imageUrl}
-          width="64"
-        />
-      </TableCell>
-      <TableCell className="font-medium">{product.name}</TableCell>
+      <TableCell className="font-medium">{task.title}</TableCell>
+      <TableCell className="hidden md:table-cell">{task.description}</TableCell>
+
       <TableCell>
         <Badge variant="outline" className="capitalize">
-          {product.status}
+          {task.status ? 'Completed' : 'Incomplete'}
         </Badge>
       </TableCell>
-      <TableCell className="hidden md:table-cell">{`$${product.price}`}</TableCell>
-      <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
-      <TableCell className="hidden md:table-cell">
-        {product.availableAt.toLocaleDateString("en-US")}
-      </TableCell>
+      <TableCell className="hidden md:table-cell">{task.date}</TableCell>
       <TableCell>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -46,9 +35,13 @@ export function Product({ product }: { product: SelectProduct }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+
+            <Link href={`/task/edit/` + task.id}>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+            </Link>
             <DropdownMenuItem>
-              <form action={deleteProduct}>
+              <form action={deleteTask}>
+                <input type="hidden" name="id" value={task.id} />
                 <button type="submit">Delete</button>
               </form>
             </DropdownMenuItem>

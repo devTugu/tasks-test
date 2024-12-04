@@ -5,9 +5,6 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import {
   pgTable,
   text,
-  numeric,
-  integer,
-  timestamp,
   pgEnum,
   serial
 } from 'drizzle-orm/pg-core';
@@ -18,55 +15,66 @@ export const db = drizzle(neon(process.env.POSTGRES_URL!));
 
 export const statusEnum = pgEnum('status', ['active', 'inactive', 'archived']);
 
-export const products = pgTable('products', {
+export const tasks = pgTable('tasks', {
   id: serial('id').primaryKey(),
-  imageUrl: text('image_url').notNull(),
-  name: text('name').notNull(),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
   status: statusEnum('status').notNull(),
-  price: numeric('price', { precision: 10, scale: 2 }).notNull(),
-  stock: integer('stock').notNull(),
-  availableAt: timestamp('available_at').notNull()
+  date: text('date').notNull()
 });
 
-export type SelectProduct = typeof products.$inferSelect;
-export const insertProductSchema = createInsertSchema(products);
+export type SelectTask = typeof tasks.$inferSelect;
+export const insertTaskSchema = createInsertSchema(tasks);
 
-export async function getProducts(
+export async function getTasks(
   search: string,
   offset: number
 ): Promise<{
-  products: SelectProduct[];
+  tasks: SelectTask[];
   newOffset: number | null;
-  totalProducts: number;
+  totalTasks: number;
 }> {
   // Always search the full table, not per page
   if (search) {
     return {
-      products: await db
+      tasks: await db
         .select()
-        .from(products)
-        .where(ilike(products.name, `%${search}%`))
+        .from(tasks)
+        .where(ilike(tasks.title, `%${search}%`))
         .limit(1000),
       newOffset: null,
-      totalProducts: 0
+      totalTasks: 0
     };
   }
 
   if (offset === null) {
-    return { products: [], newOffset: null, totalProducts: 0 };
+    return { tasks: [], newOffset: null, totalTasks: 0 };
   }
 
-  let totalProducts = await db.select({ count: count() }).from(products);
-  let moreProducts = await db.select().from(products).limit(5).offset(offset);
-  let newOffset = moreProducts.length >= 5 ? offset + 5 : null;
+  let totalTasks = await db.select({ count: count() }).from(tasks);
+  let moreTasks = await db.select().from(tasks).limit(5).offset(offset);
+  let newOffset = moreTasks.length >= 5 ? offset + 5 : null;
 
   return {
-    products: moreProducts,
+    tasks: moreTasks,
     newOffset,
-    totalProducts: totalProducts[0].count
+    totalTasks: totalTasks[0].count
   };
 }
 
-export async function deleteProductById(id: number) {
-  await db.delete(products).where(eq(products.id, id));
+export async function getTask(id: number): Promise<SelectTask | null> {
+  let task: any = await db.select().from(tasks).where(eq(tasks.id, id));
+  return task[0] ?? null;
+}
+
+export async function createTaskBy(data: any) {
+  await db.insert(tasks).values(data);
+}
+
+export async function updateTaskById(data: any, id: number) {
+  await db.update(tasks).set(data).where(eq(tasks.id, id));
+}
+
+export async function deleteTaskById(id: number) {
+  await db.delete(tasks).where(eq(tasks.id, id));
 }
