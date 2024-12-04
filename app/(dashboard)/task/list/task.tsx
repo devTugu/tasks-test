@@ -10,7 +10,7 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { SelectTask } from '@/lib/db';
-import { deleteTask } from './actions';
+import { deleteTask } from '../action';
 import Link from 'next/link';
 
 export function Task({ task }: { task: SelectTask }) {

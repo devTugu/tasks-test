@@ -1,6 +1,6 @@
 import { PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { TasksTable } from './tasks-table';
+import { TasksTable } from './task/list/tasks-table';
 import { getTasks } from '@/lib/db';
 import Link from 'next/link';
 

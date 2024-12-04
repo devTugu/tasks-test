@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { updateTask } from '../../../actions';
+import { updateTask } from '../../action';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -112,8 +112,8 @@ export default function TaskCreate({ task }: any) {
               name="status"
               render={({ field }) => {
                 return (
-                  <FormItem defaultValue={field.value}>
-                    <FormLabel defaultValue={field.value}>Status</FormLabel>
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}

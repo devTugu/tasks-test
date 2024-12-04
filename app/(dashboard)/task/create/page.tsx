@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { createTask } from '../../actions';
+import { createTask } from '../action';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
