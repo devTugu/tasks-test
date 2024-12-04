@@ -11,7 +11,7 @@ git clone https://github.com/devTugu/tasks-test
 2. **Navigate to the project directory:**
 
 ```sh
-cd your-repo
+cd tasks-test
 ```
 
 3. **Install dependencies:**
