@@ -17,10 +17,16 @@ cd tasks-test
 3. **Install dependencies:**
 
 ```sh
+duplicate .env.example to .env
+```
+
+4. **Install dependencies:**
+
+```sh
 npm install
 ```
 
-4. **Run the project:**
+5. **Run the project:**
 
 ```sh
 npm start
