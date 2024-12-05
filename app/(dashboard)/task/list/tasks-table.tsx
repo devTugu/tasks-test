@@ -20,6 +20,7 @@ import { SelectTask } from '@/lib/db';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Search from './search';
 
 export function TasksTable({
   tasks,
@@ -31,7 +32,7 @@ export function TasksTable({
   totalTasks: number;
 }) {
   let router = useRouter();
-  let tasksPerPage = 5;
+  let tasksPerPage = 10;
 
   function prevPage() {
     router.back();
@@ -48,6 +49,10 @@ export function TasksTable({
         <CardDescription>
           Manage your tasks and view their sales performance.
         </CardDescription>
+
+        <div className="grid justify-items-end">
+          <Search />
+        </div>
       </CardHeader>
       <CardContent>
         <Table>

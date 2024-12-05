@@ -27,7 +27,7 @@ export type SelectTask = typeof tasks.$inferSelect;
 export const insertTaskSchema = createInsertSchema(tasks);
 
 export async function getTasks(
-  search: string,
+  search: any,
   offset: number
 ): Promise<{
   tasks: SelectTask[];
@@ -40,7 +40,7 @@ export async function getTasks(
       tasks: await db
         .select()
         .from(tasks)
-        .where(ilike(tasks.title, `%${search}%`))
+        .where(eq(tasks.status, search))
         .limit(1000),
       newOffset: null,
       totalTasks: 0
@@ -52,8 +52,8 @@ export async function getTasks(
   }
 
   let totalTasks = await db.select({ count: count() }).from(tasks);
-  let moreTasks = await db.select().from(tasks).limit(5).offset(offset);
-  let newOffset = moreTasks.length >= 5 ? offset + 5 : null;
+  let moreTasks = await db.select().from(tasks).limit(10).offset(offset);
+  let newOffset = moreTasks.length >= 10 ? offset + 10 : null;
 
   return {
     tasks: moreTasks,
