@@ -14,7 +14,7 @@ git clone https://github.com/devTugu/tasks-test
 cd tasks-test
 ```
 
-3. **Install dependencies:**
+3. **Duplicate env:**
 
 ```sh
 duplicate .env.example to .env
